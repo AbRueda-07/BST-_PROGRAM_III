@@ -1,210 +1,230 @@
-# Tarea: Árbol Binario de Búsqueda (BST) en Java
+# Árbol Binario de Búsqueda (BST)
 
-**Curso:** Programación 3  
-**Tema:** Estructuras de datos no lineales — Árboles  
-**Modalidad:** Individual  
-**Entrega:** Repositorio Git con el código modificado + capturas de ejecución
+## Descripción
 
----
+Proyecto desarrollado en Java utilizando Maven. Consiste en la implementación manual de un Árbol Binario de Búsqueda (BST) sin utilizar estructuras de datos de `java.util`.
 
-## 1. Objetivo
-
-Comprender, completar y extender una implementación **manual** de un Árbol Binario de Búsqueda (BST) en Java, **sin usar `java.util` ni librerías externas**, siguiendo el mismo estilo con el que ya implementamos `queue` y `listas` enlazadas en clase.
-
-Al finalizar la tarea el estudiante debe ser capaz de:
-
-- Explicar la propiedad fundamental de un BST.
-- Implementar inserción, búsqueda, eliminación y recorridos de forma recursiva.
-- Reconocer los 3 casos de eliminación de un nodo en un BST.
-- Implementar algoritmos clásicos sobre árboles (altura, balanceo, validación, LCA, espejo, etc.).
+Además de las operaciones básicas del árbol, se implementaron cinco problemas obligatorios y cuatro ejercicios extra relacionados con recorridos, validaciones y análisis de árboles binarios.
 
 ---
 
-## 2. Proyecto base
+# Requisitos
 
-El proyecto Maven `arboles/` ya contiene una base funcional:
-
-```
-arboles/
-├── pom.xml
-└── src/main/java/umg/edu/progra/arboles/
-    ├── Nodo.java
-    ├── ArbolBinarioBusqueda.java
-    └── Principal.java
-```
-
-### Lo que YA está implementado
-
-- `Nodo` con `dato`, `izquierdo` y `derecho`.
-- `ArbolBinarioBusqueda` con:
-  - `insertar(int)`
-  - `buscar(int)` / `contiene(int)`
-  - `eliminar(int)` cubriendo los 3 casos clásicos.
-  - `minimo()`, `maximo()`, `altura()`, `tamanio()`, `contarHojas()`.
-  - Recorridos: `inOrden()`, `preOrden()`, `postOrden()`, `recorridoPorNiveles()` (BFS con una cola casera, **sin `java.util`**).
-  - `imprimirArbol()` (impresión visual rotada 90°).
-- `Principal` con un ejemplo completo de uso.
+* Java JDK 11 o superior
+* Apache Maven 3.8 o superior
+* Eclipse IDE (opcional)
 
 ---
 
-## 3. Cómo ejecutar el proyecto
+# Compilación
 
-Desde la carpeta `arboles/`:
+Desde la carpeta raíz del proyecto:
 
 ```bash
-mvn compile
-java -cp target/classes umg.edu.progra.arboles.Principal
+mvn clean compile
 ```
 
-O abriéndolo como proyecto Maven en Eclipse y ejecutando la clase `Principal`.
+---
 
-Salida esperada (resumen):
+# Ejecución
 
+```bash
+mvn exec:java -Dexec.mainClass="umg.edu.progra.arboles.Principal"
 ```
-===== Arbol Binario de Busqueda =====
+
+---
+
+# Estructura del árbol de prueba
+
+El programa inserta los siguientes valores:
+
+```text
+50, 30, 70, 20, 40, 60, 80, 10
+```
+
+Generando el siguiente BST:
+
+```text
+              50
+             /  \
+           30    70
+          / \   / \
+        20 40 60 80
+       /
+      10
+```
+
+---
+
+# Problema 1 - contarNodos()
+
+## Descripción
+
+Cuenta la cantidad total de nodos del árbol utilizando recursividad sin utilizar el atributo `tamanio`.
+
+## Ejemplo
+
+### Entrada
+
+Árbol de prueba.
+
+### Salida
+
+```text
 Tamanio: 8
-Altura:  3
-Minimo:  10
-Maximo:  80
-Hojas:   4
-...
-InOrden    (ascendente): 10 20 30 40 50 60 70 80
-PreOrden   (raiz primero): 50 30 20 10 40 70 60 80
-PostOrden  (raiz al final): 10 20 40 30 60 80 70 50
-Por niveles (BFS):         50 30 70 20 40 60 80 10
+Nodos (recursivo): 8
 ```
 
 ---
 
-## 4. Reglas obligatorias
+# Problema 2 - esBalanceado()
 
-> El incumplimiento de cualquiera de estas reglas invalida la tarea.
+## Descripción
 
-1. **Prohibido usar `java.util.*`** (ni `ArrayList`, ni `LinkedList`, ni `Queue`, ni `Stack`, ni `HashMap`, ni `Arrays`, etc.).
-2. **Prohibido usar cualquier librería externa** para la estructura del árbol.
-3. Si necesitan una estructura auxiliar (cola, pila, lista), deben implementarla manualmente como ya se hizo con `ColaNodos` dentro de `ArbolBinarioBusqueda`.
-4. Toda la lógica nueva debe estar en la clase `ArbolBinarioBusqueda` (o en clases auxiliares dentro del mismo paquete `umg.edu.progra.arboles`).
-5. Cada método nuevo debe probarse desde la clase `Principal`.
-6. El código debe compilar con `mvn compile` sin errores ni warnings.
+Verifica si el árbol está balanceado.
 
----
+Un árbol se considera balanceado cuando para cada nodo la diferencia de alturas entre los subárboles izquierdo y derecho es menor o igual a 1.
 
-## 5. Problemas a resolver
+## Ejemplo verdadero
 
-Implementar los siguientes métodos en la clase `ArbolBinarioBusqueda` y demostrar su funcionamiento desde `Principal`.
-
-### Problema 1 — Contar nodos recursivamente
-
-Implementar:
-
-```java
-public int contarNodos();
+```text
+Balanceado: true
 ```
 
-- Debe devolver la cantidad total de nodos del árbol **usando recursividad**.
-- **NO** puede usar el campo `tamanio` ya existente.
-- Validar que su resultado coincida con `tamanio()` antes y después de insertar/eliminar.
+## Ejemplo falso
 
-### Problema 2 — ¿Está balanceado?
-
-Implementar:
-
-```java
-public boolean esBalanceado();
+```text
+===== PRUEBA ARBOL DESBALANCEADO =====
+Balanceado: false
 ```
 
-- Un árbol está balanceado si, para **cada nodo**, la diferencia de altura entre su subárbol izquierdo y derecho es `<= 1`.
-- Probarlo con un árbol balanceado y con uno claramente desbalanceado (por ejemplo, insertando 1, 2, 3, 4, 5 en ese orden).
+---
 
-### Problema 3 — Validar que sea un BST
+# Problema 3 - esBSTValido()
 
-Implementar:
+## Descripción
 
-```java
-public boolean esBSTValido();
+Verifica que todos los nodos cumplan la propiedad de Árbol Binario de Búsqueda.
+
+## Ejemplo verdadero
+
+```text
+BST valido: true
 ```
 
-- Debe verificar que el árbol cumple la propiedad de BST (todo el subárbol izquierdo `<` raíz, todo el subárbol derecho `>` raíz).
-- **Pista:** una solución limpia es pasar un rango `(min, max)` permitido en cada llamada recursiva.
-- Probarlo en el árbol generado por `Principal`. Debe retornar `true`.
-- Para demostrar el caso `false`, construir manualmente un árbol "roto" (modificando nodos directamente) y validar que devuelve `false`.
+## Ejemplo falso
 
-### Problema 4 — Ancestro común más bajo (LCA)
-
-Implementar:
-
-```java
-public int ancestroComunMasBajo(int a, int b);
+```text
+===== PRUEBA BST INVALIDO =====
+BST valido: false
 ```
 
-- Debe devolver el dato del nodo que es el **ancestro común más bajo** (Lowest Common Ancestor) de los valores `a` y `b`.
-- Aprovechar la propiedad del BST: si ambos valores son menores que el actual → ir a la izquierda; si ambos son mayores → ir a la derecha; en caso contrario, el nodo actual es el LCA.
-- Si `a` o `b` no existen en el árbol, lanzar `IllegalArgumentException`.
-- Ejemplo con el árbol de `Principal`:
-  - `lca(10, 40)` → `30`
-  - `lca(10, 80)` → `50`
-  - `lca(60, 80)` → `70`
+---
 
-### Problema 5 — Espejo del árbol (inversión)
+# Problema 4 - ancestroComunMasBajo()
 
-Implementar:
+## Descripción
 
-```java
-public void invertir();
+Obtiene el ancestro común más bajo (Lowest Common Ancestor - LCA) de dos valores utilizando las propiedades del BST.
+
+## Ejemplos
+
+```text
+LCA(10,40): 30
+LCA(10,80): 50
+LCA(60,80): 70
 ```
 
-- Debe intercambiar `izquierdo` y `derecho` en **todos** los nodos del árbol (reflejo / espejo).
-- Antes de invertir, mostrar el árbol con `imprimirArbol()` e `inOrden()`.
-- Después de invertir, volver a mostrarlos. El `inOrden` original ya **no** estará ordenado (se invierte).
+## Manejo de errores
+
+Si alguno de los valores no existe en el árbol:
+
+```text
+===== PRUEBA EXCEPCION LCA =====
+Excepcion capturada: Uno o ambos valores no existen en el arbol
+```
 
 ---
 
-## 6. Ejercicios extra (opcionales, suman puntos)
+# Problema 5 - invertir()
 
-Solo cuentan si los 5 problemas anteriores están correctos.
+## Descripción
 
-- **E1.** `int kEsimoMenor(int k)` — devuelve el k-ésimo valor más pequeño usando inOrden.
-- **E2.** `void imprimirRangoOrdenado(int min, int max)` — imprime en orden todos los valores en el rango `[min, max]` recorriendo lo menos posible el árbol.
-- **E3.** `int diametro()` — el camino más largo (en aristas) entre dos nodos cualesquiera del árbol.
-- **E4.** Construir un BST a partir de un arreglo `int[]` recibido por la consola (`args`).
+Invierte el árbol creando su imagen espejo.
 
----
+## Antes
 
-## 7. Entregables
+```text
+InOrden antes:
+10 20 30 40 50 60 70 80
+```
 
-1. **Repositorio Git** (GitHub / GitLab) con el proyecto modificado.
-2. **Capturas** de la salida en consola que demuestren cada problema resuelto.
-3. **README.md propio** del estudiante (puede partir de este) explicando:
-   - Cómo compilar y ejecutar.
-   - Qué hace cada método nuevo.
-   - Un ejemplo de entrada y salida por cada problema.
-4. Commits descriptivos por cada problema (por ejemplo: `feat: problema 1 contarNodos recursivo`).
+## Después
 
----
-
-## 8. Rúbrica de evaluación (100 pts)
-
-| Criterio                                            | Puntos |
-| --------------------------------------------------- | -----: |
-| Problema 1 — `contarNodos` recursivo                | 10     |
-| Problema 2 — `esBalanceado`                         | 15     |
-| Problema 3 — `esBSTValido`                          | 15     |
-| Problema 4 — `ancestroComunMasBajo` (LCA)           | 20     |
-| Problema 5 — `invertir` (espejo)                    | 15     |
-| Pruebas claras en `Principal` (cada método se ve)   | 10     |
-| Código limpio, recursivo cuando aplica, sin `util`  | 10     |
-| Commits, README propio y capturas                   | 5      |
-| **Ejercicios extra (E1–E4)**                        | +10    |
+```text
+InOrden despues:
+80 70 60 50 40 30 20 10
+```
 
 ---
 
-## 9. Recomendaciones
+# Ejercicios Extra
 
-- **Piensen recursivamente.** Casi todo en árboles se resuelve definiendo el caso base (nodo `null`) y combinando el resultado de los subárboles izquierdo y derecho.
-- **Dibujen el árbol antes de codificar.** Especialmente para `eliminar`, `LCA` e `invertir`.
-- **Prueben con árboles vacíos** (`raiz == null`) y con árboles de un solo nodo. La mitad de los errores aparecen en esos bordes.
-- **No copien código de internet sin entenderlo.** En la defensa oral se pregunta sobre cualquier línea.
+## E1 - kEsimoMenor()
+
+Obtiene el k-ésimo valor más pequeño mediante recorrido InOrden.
+
+### Ejemplo
+
+```text
+1er menor: 10
+3er menor: 30
+8vo menor: 80
+```
 
 ---
 
-> "Un BST bien implementado es más rápido que muchas estructuras prediseñadas… si entienden el porqué."
+## E2 - imprimirRangoOrdenado()
+
+Imprime los valores comprendidos dentro de un rango dado.
+
+### Ejemplo
+
+```text
+Rango [25,70]: 30 40 50 60 70
+Rango [40,80]: 40 50 60 70 80
+```
+
+---
+
+## E3 - diametro()
+
+Calcula el diámetro del árbol, es decir, el camino más largo entre dos nodos.
+
+### Ejemplo
+
+```text
+Diametro: 5
+```
+
+---
+
+## E4 - Construcción desde args[]
+
+Permite construir un BST utilizando valores enviados como argumentos de ejecución.
+
+### Ejemplo
+
+```bash
+mvn exec:java -Dexec.mainClass="umg.edu.progra.arboles.Principal" -Dexec.args="50 30 70 20 40 60 80 10"
+```
+
+---
+
+# Restricciones Cumplidas
+
+* No se utilizó `java.util`.
+* No se utilizaron librerías externas.
+* Se implementaron estructuras auxiliares manualmente.
+* Toda la lógica fue desarrollada dentro del paquete `umg.edu.progra.arboles`.
+* Todos los métodos fueron probados desde la clase `Principal`.
